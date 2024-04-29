@@ -40,3 +40,5 @@ x = requests.post(url,json=data)
 I wanted an easy way to get dynamic titles into my switcher.   You can do similar overlays in OBS or other software based solutions, but sometimes hardware is just easier to use.   The goal was to integrate a streamdeck into the atem for switching titles through dozens of presenters throughout the day, and it does that well and with lots of flexibility.
 
 
+## TODO 
+This was hacked together in a couple hours, so the code is pretty ugly and there's no error checking.  It works fine but if you pass in bad requests it does not recover gracefully.  If this happens the screen will go back to raspberry pi console, and you'll have to restart the docker app ```sudo docker restart bugger-app```.   The display runs in a separate thread so uvicorn continues running happily, need to fix this. 
