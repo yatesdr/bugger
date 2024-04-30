@@ -4,35 +4,6 @@ Bugger takes an SVG template and renders it on the HDMI output of a Raspberry-Pi
 ## How to use it
 Get your raspberry pi 4 and install Raspbian-64 bit minimal.   Install docker, then clone the repo and run ./install.sh.   You'll have to design your SVG lower thirds or other graphics, a few tests are included and with time I'll add more examples.
 
-## Raspberry Pi isn't working with my Display / HDMI switcher / SDI converters!
-Yes, this is a known issue with Raspberry Pi's, they like to do weird things with their HDMI ports if you don't have a normal monitor connected.
-
-You can usually fix it by editing /boot/firmware/config.txt and setting the following options for 1080p output:
-
-/boot/firmware/config.txt:
-```
-hdmi_ignore_edid=0xa5000080
-display_autodetect=0
-hdmi_force_hotplug=1
-hdmi_group=1
-hdmi_mode=34
-```
-
-The install script will do it for you, but make sure you're using the "Fake" vt4-kms driver:
-```
-dtoverlay=vc4-fkms-v3d
-```
-
-Additionally, if the above fixes aren't working for your converters you can try adding this to the end of your kernel command line:
-
-/boot/firmware/cmdline.txt:
-```
-video=HDMI-A-1:1920x1080Die@60
-```
-
-These changes get it working with the BlackMagic bi-directional 3G SDI / HDMI converters I use, which tend to be a bit touchier than most.
-
-
 
 ## How to integrate it
 I use this to generate a downstream key for use with Atem series switchers, using Streamdeck and Bitfocus Companion.   
@@ -85,5 +56,45 @@ I wanted an easy way to get dynamic titles into my switcher.   You can do simila
 The beauty of this method is that it can fully render the SVG document as a template.   So if you want to change colors or title strings this is perfectly possible depending how you construct your SVG.   For example, to render a Baseball scoreboard you can keep score in a separate application and then fill in "ball1" as red if there's more than one ball.   You can fully automate this with streamdeck variables to create your post request substitutions if you'd like. 
 
 
+# Troubleshooting Display Issues
+
+IE - Raspberry Pi4b isn't working with my Display / HDMI switcher / SDI converters!
+
+Yes, this is a known issue with Raspberry Pi's, they like to do weird things with their HDMI ports if you don't have a normal monitor connected, but fortunately you can force them to use the desired configurations. 
+
+1)  Make sure you didn't install X server, this application is meant to run on the base "Lite" Raspbian distribution.
+
+2)  Fix display issues by forcing the resolutions you want.  You can usually fix it by editing /boot/firmware/config.txt and setting the following options for 1080p output:
+
+/boot/firmware/config.txt:
+```
+hdmi_ignore_edid=0xa5000080
+display_autodetect=0
+hdmi_force_hotplug=1
+hdmi_group=1
+hdmi_mode=34   # 1080p30.  Set hdmi_mode=16 for 1080p60, or hdmi_mode=46 for 1080i/120Hz depending on your switcher.
+```
+
+
+The install script will do it for you, but make sure you're using the "Fake" vt4-kms driver:
+```
+dtoverlay=vc4-fkms-v3d
+```
+
+Additionally, if the above fixes aren't working for your converters you can try adding this to the end of your kernel command line:
+
+/boot/firmware/cmdline.txt:
+```
+video=HDMI-A-1:1920x1080Die@60
+```
+Select the video mode and framerate suitable for your switcher or converter.
+
+The above changes get it working with the BlackMagic bi-directional 3G SDI / HDMI converters I use, which tend to be a bit touchier than most when it comes to conversion standards.
+
+
 ## TODO 
 This was hacked together in a couple hours, so the code is pretty ugly and there's no error checking.  It works fine but if you pass in bad requests it does not recover gracefully.  If this happens the screen will go back to raspberry pi console, and you'll have to restart the docker app ```sudo docker restart bugger-app```.   The display runs in a separate thread so uvicorn continues running happily, need to fix this. 
+
+1)  Add a proper web interface for changing titles dynamically.    Right now I just use Bitfocus companion to send the POST request which works fine.
+2)  Add error checking and handling
+3)  Add monitoring and restart for crashed display thread.
