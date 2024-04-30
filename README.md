@@ -1,5 +1,7 @@
 # Bugger
-Bugger takes an SVG template and renders it on the HDMI output of a Raspberry-Pi4.   This is useful for real-time overlays such as scoreboards, lower thirds, or other vector graphics.   It exposes a simple POST interface for basic template substitution and file selection, and includes a pre-multiplier for compositing alpha into your preferred chroma or luma-key colors.
+Bugger takes an SVG template and renders it on the HDMI output of a Raspberry-Pi4.   This is useful for real-time or dynamic overlays such as scoreboards, lower thirds, or other vector graphics.   It exposes a simple POST interface for basic template substitution and file selection, and includes a pre-multiplier for compositing alpha into your preferred chroma or luma-key colors.   
+
+I wrote this initially to provide an easy solution for lower thirds with dozens of event speakers without using up all the media slots in my Atem M/E 1.   Using the RPI4b to directly generate the lower thirds dynamically provides a nice solution with a StreamDeck XL and BitFocus companion,  so I can have pages of speakers with Name, Title, and Topic all ready to go at the push of a button, and use none of the media pool storage for them.   It does require a spare input and knowledge of how to use your keyers, but there are lots of tutorials on this already.
 
 ## How to use it
 Get your raspberry pi 4 and install Raspbian-64 bit minimal.   Install docker, then clone the repo and run ./install.sh.   You'll have to design your SVG lower thirds or other graphics, a few tests are included and with time I'll add more examples.
