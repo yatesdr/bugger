@@ -8,6 +8,7 @@ Get your raspberry pi 4 and install Raspbian-64 bit minimal.   Install docker, t
 Yes, this is a known issue with Raspberry Pi's, they like to do weird things with their HDMI ports if you don't have a normal monitor connected.
 
 You can usually fix it by editing /boot/firmware/config.txt and setting the following options for 1080p output:
+
 /boot/firmware/config.txt:
 ```
 hdmi_ignore_edid=0xa5000080
