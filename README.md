@@ -23,12 +23,14 @@ The install script will do it for you, but make sure you're using the "Fake" vt4
 dtoverlay=vc4-fkms-v3d
 ```
 
-Additionally, if the above fixes aren't working for your converters you can try adding this to the end of your kernel commandline in /boot/firmware/cmdline.txt:
+Additionally, if the above fixes aren't working for your converters you can try adding this to the end of your kernel command line:
+
+/boot/firmware/cmdline.txt:
 ```
 video=HDMI-A-1:1920x1080Die@60
 ```
 
-These changes get it working with the BlackMagic bi-directional converters I use.
+These changes get it working with the BlackMagic bi-directional 3G SDI / HDMI converters I use, which tend to be a bit touchier than most.
 
 
 
