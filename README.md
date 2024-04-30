@@ -97,6 +97,23 @@ The above changes get it working with the BlackMagic bi-directional 3G SDI / HDM
 ## I'm using an Atem M/E 1 (or other SDI switcher) and nothing is showing up.
 These are touchy about the video standards, but do work.   Most of the time you'll need to log in to the settings page and select a compatible video mode for the switcher.   I have had luck with 1080p60 and 1080p30, but you may just have to play with it a bit to find the best solution.   The video mode of the switcher and the converter must match the video mode you force using the above options or it will probably not work, or will be glitchy.
 
+
+## This isn't working on my Banana Pi, Raspberry PI 3, 400, etc.
+This is only tested on the Raspberry Pi 4, and is tightly integrated to the hardware.   It may work on others, but no support or issues will be accepted.   Go buy a Pi 4 and put it in a case, load this up and move on.
+
+## Template substitution isn't working
+You'll probably need to at least hand-edit your SVG files to make sure all your strings are together.   Use VIM or Nano, and make sure it all makes sense and is somewhat human-readable.   Many of the SVG exports from photo software packages are pretty messy and split strings with <tspan ... > blocks, so the simple string substitution will be broken.
+
+I use Affinity Photo to generate and export my SVG's, then hand edit them to make sure all the template variables are in the right place and intact.   They're often not.   If available, you should flatten transforms and not export non-compatible features.   In Affinity Photo, there are check-boxes for the conversions of how to handle these.
+
+1)  Rasterize:  nothing
+2)  Flatten Transforms
+3)  Set ViewBox
+4)  Add Line Breaks
+5)  Use fonts that are web-compatible (TTF core fonts)
+
+Even with all these set, a complicated layout is probably going to need hand editing to get the template variables into a suitable position.   I usually go through mine and make sure my $SUBSTITUTE strings are in-tact, and then manually place the text and apply styling to it.
+
 ## TODO 
 This was hacked together in a couple hours, so the code is pretty ugly and there's no error checking.  It works fine but if you pass in bad requests it does not recover gracefully.  If this happens the screen will go back to raspberry pi console, and you'll have to restart the docker app ```sudo docker restart bugger-app```.   The display runs in a separate thread so uvicorn continues running happily, need to fix this. 
 
