@@ -1,5 +1,5 @@
 # Bugger
-Bugger takes an SVG template and renders it on the HDMI output of a Raspberry-Pi4.   This is useful for real-time overlays such as scoreboards, lower thirds, or other vector graphics.   It exposes a simple POST interface for basic template substitution and file selection.
+Bugger takes an SVG template and renders it on the HDMI output of a Raspberry-Pi4.   This is useful for real-time overlays such as scoreboards, lower thirds, or other vector graphics.   It exposes a simple POST interface for basic template substitution and file selection, and includes a pre-multiplier for compositing alpha into your preferred chroma or luma-key colors.
 
 ## How to use it
 Get your raspberry pi 4 and install Raspbian-64 bit minimal.   Install docker, then clone the repo and run ./install.sh.   You'll have to design your SVG lower thirds or other graphics, a few tests are included and with time I'll add more examples.
@@ -21,6 +21,8 @@ If you're plugged directly into a normal monitor or TV when you boot the pi, thi
 
 ## Example API post from Python
 Here we have prepared a corporate lower third we want to use, and the template has $NAME, $TITLE, and $TOPIC.   We call the file, pass the chromakey color we want (0,255,0) = Green, and pass in the substitutions we want to make in the file.   Now we will see the display update with a green pre-multiplied key behind the transparent parts of the SVG.
+
+If you want to use a black mask for transparent bits (for downstream keying perhaps), pass (0,0,0).   The keyer only multiplies down areas of the SVG that have an Alpha channel, so if you want to just have it show what you send it you can export without Alpha, or set your own background color and make sure there is nothing with Alpha that isn't already blended.    If you're having issues, make sure you're exporting a flat SVG document.
 
 Example usage from API:
 ```
