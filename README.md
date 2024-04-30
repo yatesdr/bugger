@@ -4,6 +4,33 @@ Bugger takes an SVG template and renders it on the HDMI output of a Raspberry-Pi
 ## How to use it
 Get your raspberry pi 4 and install Raspbian-64 bit minimal.   Install docker, then clone the repo and run ./install.sh.   You'll have to design your SVG lower thirds or other graphics, a few tests are included and with time I'll add more examples.
 
+## Raspberry Pi isn't working with my Display / HDMI switcher / SDI converters!
+Yes, this is a known issue with Raspberry Pi's, they like to do weird things with their HDMI ports if you don't have a normal monitor connected.
+
+You can usually fix it by editing /boot/firmware/config.txt and setting the following options for 1080p output:
+/boot/firmware/config.txt:
+```
+hdmi_ignore_edid=0xa5000080
+display_autodetect=0
+hdmi_force_hotplug=1
+hdmi_group=1
+hdmi_mode=34
+```
+
+The install script will do it for you, but make sure you're using the "Fake" vt4-kms driver:
+```
+dtoverlay=vc4-fkms-v3d
+```
+
+Additionally, if the above fixes aren't working for your converters you can try adding this to the end of your kernel commandline in /boot/firmware/cmdline.txt:
+```
+video=HDMI-A-1:1920x1080Die@60
+```
+
+These changes get it working with the BlackMagic bi-directional converters I use.
+
+
+
 ## How to integrate it
 I use this to generate a downstream key for use with Atem series switchers, using Streamdeck and Bitfocus Companion.   
 
