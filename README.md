@@ -16,6 +16,8 @@ Once the docker image is installed, it will run and take over the Raspberry Pi's
 scp my_file.svg user@<pi_ip_address>:/home/pi/bugger/svg/
 ```
 
+If you're plugged directly into a normal monitor or TV when you boot the pi, this should work as-is.   If you're using an SDI converter or some type of HDMI switcher, you will probably need to set additional options to force display conformance and output modes (see Troubleshooting at the end of this document).   Once you find the right options, this is tested to work with Atem mini, BM bidirectional converters, and BM HDMI to SDI converters, as well as the other Atem Switchers that use 1080p60 or 1080p30.
+
 
 ## Example API post from Python
 Here we have prepared a corporate lower third we want to use, and the template has $NAME, $TITLE, and $TOPIC.   We call the file, pass the chromakey color we want (0,255,0) = Green, and pass in the substitutions we want to make in the file.   Now we will see the display update with a green pre-multiplied key behind the transparent parts of the SVG.
@@ -58,7 +60,7 @@ The beauty of this method is that it can fully render the SVG document as a temp
 
 # Troubleshooting Display Issues
 
-IE - Raspberry Pi4b isn't working with my Display / HDMI switcher / SDI converters!
+## Raspberry Pi4b isn't working with my Display / HDMI switcher / SDI converters!
 
 Yes, this is a known issue with Raspberry Pi's, they like to do weird things with their HDMI ports if you don't have a normal monitor connected, but fortunately you can force them to use the desired configurations. 
 
@@ -91,6 +93,9 @@ Select the video mode and framerate suitable for your switcher or converter.
 
 The above changes get it working with the BlackMagic bi-directional 3G SDI / HDMI converters I use, which tend to be a bit touchier than most when it comes to conversion standards.
 
+
+## I'm using an Atem M/E 1 (or other SDI switcher) and nothing is showing up.
+These are touchy about the video standards, but do work.   Most of the time you'll need to log in to the settings page and select a compatible video mode for the switcher.   I have had luck with 1080p60 and 1080p30, but you may just have to play with it a bit to find the best solution.   The video mode of the switcher and the converter must match the video mode you force using the above options or it will probably not work, or will be glitchy.
 
 ## TODO 
 This was hacked together in a couple hours, so the code is pretty ugly and there's no error checking.  It works fine but if you pass in bad requests it does not recover gracefully.  If this happens the screen will go back to raspberry pi console, and you'll have to restart the docker app ```sudo docker restart bugger-app```.   The display runs in a separate thread so uvicorn continues running happily, need to fix this. 
